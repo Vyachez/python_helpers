@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-Python code to rename multiple  
-files in a directory or folder 
+Rename multiple files within directory 
 
 """
 # importing os module 
