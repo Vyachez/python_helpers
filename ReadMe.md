@@ -20,4 +20,4 @@ Most common:
 
 ## Authors
 
-* **Viacheslav Nesterov** - *Initial work*
+* **Viacheslav Nesterov** - Initial work
