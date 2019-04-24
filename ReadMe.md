@@ -12,20 +12,26 @@ Some functions may require additional modules and libraries to be installed.
 Most common:
 - pandas
 - numpy
+
 Use `pip install` to acquire necessary modules
 Additional modules to be indicated for each helper function
 
 ## List of helpers
-- **_rename_files.py_** - Rename multiple files within directory
-- **_read_outlook.py_** - Extracting data from OutLook emails according to provided query.
+**_rename_files.py_** - Rename multiple files within directory
+
+**_read_outlook.py_** - Extracting data from OutLook emails according to provided query.
+
 _Additional modules requires to install:_
--- pypiwin32
--- zipfile36
--- tqdm
-  _Example  of usage:_
-    `Mailbox(path=os.getcwd(), mailbox="yourlastname", folder=1, subj_keys=["Python User"],
+- pypiwin32
+- zipfile36
+- tqdm
+
+_Example  of usage:_
+
+`Mailbox(path=os.getcwd(), mailbox="yourlastname", folder=1, subj_keys=["Python User"],
 	text=True, attach=True, unzip=True).search_mail()`
-  _Instructions:_
+  
+ _Instructions:_
   Please read class description or call `help(Mailbox)` command
   
 ### Contributing to this repository
@@ -45,4 +51,5 @@ In case if advice, consultation required to embed the code into specific project
 Please lis your name here if you contribute to this repository and indicate function/helper name you are contributing.
 
 Viacheslav Nesterov - _read_outlook.py_
+
 Viacheslav Nesterov - _rename_files.py_
