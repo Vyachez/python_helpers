@@ -34,12 +34,12 @@ Additional modules to be indicated for each helper function
  >_Instructions:_
  Copy file into your working code directory. Import module into your code using `import read_outlook`. Read module class description or call `help(read_outlook.Mailbox)` command for all arguments documentation.
  
- **3. magic_xl.py_** - Magic Excel. Automatic Excel Spreadsheet formatting.
+ **3. _magic_xl.py_** - Magic Excel. Automatic Excel Spreadsheet formatting.
 >Additional modules required to install:
 - string
 >_Example  of usage:_
 - `decor(path, file_name, tab_name)` - if you target certain Excel file in directory. `tab_name` is name of desired tab when formatted file returned. The file will be created in same directory.
-- `decor(path, file_name, tab_name, dataframe=[])` - if you pass Pandas Dataframe to be formatted. The file will be created and saved in specified directory under `path`and will have `file_name`_fmt.xls name.
+- `decor(path, file_name, tab_name, dataframe=[])` - if you pass Pandas Dataframe to be formatted. The file will be created and saved in specified directory under `path`and will have `file_name`_fmt.xlsx name.
 - `decor(output_path, "Grocery_shop.xlsx", tab_name='Fruits',
              dataframe=master_df,
              row_h=None, col_ws=[11, 17, 165],
