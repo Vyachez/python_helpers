@@ -12,44 +12,57 @@ Some functions may require additional modules and libraries to be installed.
 Most common:
 - pandas
 - numpy
+- openpyxl
+- tqdm
 
-Use `pip install` to acquire necessary modules
+Use `pip install <module name>` to acquire necessary modules.
 Additional modules to be indicated for each helper function
 
 ## List of helpers
-**_rename_files.py_** - Rename multiple files within directory
+**1. _rename_files.py_** - Rename multiple files within directory
 
-**_read_outlook.py_** - Extracting data from OutLook emails according to provided query.
+**2. _read_outlook.py_** - Extracting data from OutLook emails according to provided query.
 
-_Additional modules requires to install:_
+>_Additional modules required to install:_
 - pypiwin32
 - zipfile36
-- tqdm
 
-_Example  of usage:_
-
+>_Example  of usage:_
 `Mailbox(path=os.getcwd(), mailbox="yourlastname", folder=1, subj_keys=["Python User"],
 	text=True, attach=True, unzip=True).search_mail()`
   
- _Instructions:_
-  Please read class description or call `help(Mailbox)` command
+ >_Instructions:_
+ Copy file into your working code directory. Import module into your code using `import read_outlook`. Read module class description or call `help(read_outlook.Mailbox)` command for all arguments documentation.
+ 
+ **3. magic_xl.py_** - Magic Excel. Automatic Excel Spreadsheet formatting.
+>Additional modules required to install:
+- string
+>_Example  of usage:_
+- `decor(path, file_name, tab_name)` - if you target certain Excel file in directory. `tab_name` is name of desired tab when formatted file returned. The file will be created in same directory.
+- `decor(path, file_name, tab_name, dataframe=[])` - if you pass Pandas Dataframe to be formatted. The file will be created and saved in specified directory under `path`and will have `file_name`_fmt.xls name.
+- `decor(output_path, "Grocery_shop.xlsx", tab_name='Fruits',
+             dataframe=master_df,
+             row_h=None, col_ws=[11, 17, 165],
+             header_h=27, conditional_coloring={'apple':'34eb5f', 'banana':'e8eb34'},
+             header_color="DDDDDD", body_color="FFFFFF",
+             left_col_color="FFFFFF",
+             footnote="open 24/7")` - full example with passing dataframe, including conditional formatting and specified columns width.
+>Instructions and additional description:
+Copy file into your working code directory. Import module into your code using `import magic_xl`. Read module class description or call `help(magic_xl.decor)` command for all arguments documentation.
   
 ### Contributing to this repository
-- anyone can contribute to this repository via pull request
-- new helper function should have short description to follow
+- anyone can contribute to this repository with pull request
+- new helper function should have short description and arguments documentation
 - code within helper function should be well commented
 - in case if helper function is complex it should have more thorough description and contain example of usage as above.
 
 ### License
 Anyone can use this repository code for their own purpose and at own risk. There is no guarantee the code will work inside specific projects.
-In case if advice, consultation required to embed the code into specific project, please send request to author.
+In case if advice, consultation required to embed the code into specific project, please send request to developer.
 
-### Authors
-* **Viacheslav Nesterov** - Initial work
-
-### Contributors
-Please lis your name here if you contribute to this repository and indicate function/helper name you are contributing.
-
-Viacheslav Nesterov - _read_outlook.py_
-
-Viacheslav Nesterov - _rename_files.py_
+### Developers
+Please list your name here if you contribute to this repository and indicate function/helper name you are contributing to.
+>**Viacheslav Nesterov:**
+> - _read_outlook.py_
+> - _rename_files.py_
+> - _magic_xl.py_
