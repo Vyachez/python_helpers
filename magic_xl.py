@@ -8,6 +8,8 @@ V.Nesterov
 # importing modules
 import numpy as np
 import pandas as pd
+from datetime import datetime
+from datetime import date
 
 import openpyxl
 from openpyxl import Workbook
@@ -57,9 +59,9 @@ def decor(path, file_name, tab_name, dataframe=[],
     if len(dataframe) == 0:
         # opening file
         if ".xls" in file_name or ".xlsx" in file_name:
-            data = pd.read_excel(path+file_name, header=0, dtype=object)
+            data = pd.read_excel(path+file_name, header=0, dtype='object')
         elif ".csv" in file_name:
-            data = pd.read_csv(path+file_name, dtype=object)
+            data = pd.read_csv(path+file_name, dtype="object")
         else:
             print("Error: Wrong data format. Please supply only .csv .xls or .xlsx format.")
             return None
@@ -81,7 +83,7 @@ def decor(path, file_name, tab_name, dataframe=[],
     
     # filling with data
     for r in dataframe_to_rows(data, index=False, header=True):
-        main_tab.append(r)  
+        main_tab.append(r)
     
     # #### Formatting
     print("Formatting \n")
@@ -152,24 +154,47 @@ def decor(path, file_name, tab_name, dataframe=[],
     
     # ##### applying styles 
     # appending styles to workbook
-    letters = list(string.ascii_uppercase)[:cols_no]
+    l1 = list(string.ascii_uppercase)[:cols_no]
+    l2, l3 = [],[]
+    for i in l1:
+        for l in l1:
+            l2.append(i+l)
+    for i in l1:
+        for l in l2:
+            l3.append(i+l)
+    letters = l1+l2+l3
+    letters = letters[:data.shape[1]]
     rows = rows_no + 1
+    
+    # checking datatypes
+    dates_cols = {}
+    for e, c in enumerate(data.columns):
+        if np.issubdtype(data[c].dtype, np.datetime64):
+            dates_cols[letters[e]] = 'mm-dd-yy'
     
     # left column style
     index_style = add_leftcol_style(wb)
     for rw in range(2, rows):
         main_tab['A'+str(rw)].style = index_style
-        
+        # applying data types if any
+        for k in dates_cols:
+            if k == 'A':
+                main_tab['A'+str(rw)].number_format = dates_cols[k]
+                
     # header style
     head_style = add_head_style(wb)
     for l in letters:
         main_tab[l+"1"].style = head_style
-    
+
     # body style
     body_style = add_body_style(wb)
     for rw in range(2, rows):
         for l in letters[1:]:
             main_tab[l+str(rw)].style = body_style
+            # applying data types if any
+            for k in dates_cols:
+                if k == l:
+                    main_tab[l+str(rw)].number_format = dates_cols[k]
                 
     # ##### rows and columns dimensions
     # applying rows dimensions
@@ -248,5 +273,6 @@ def decor(path, file_name, tab_name, dataframe=[],
     elif "." not in file_name:
         file_name = file_name+"_fmt.xlsx"
     wb.save(filename = path+file_name)
+    wb.close()
     print("Finished formatting, saved.")
     
