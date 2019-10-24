@@ -40,13 +40,14 @@ Additional modules to be indicated for each helper function
 >_Example  of usage:_
 - `decor(path, file_name, tab_name)` - if you target certain Excel file in directory. `tab_name` is name of desired tab when formatted file returned. The file will be created in same directory.
 - `decor(path, file_name, tab_name, dataframe=[])` - if you pass Pandas Dataframe to be formatted. The file will be created and saved in specified directory under `path`and will have `file_name`_fmt.xlsx name.
-- `decor(output_path, "Grocery_shop.xlsx", tab_name='Fruits',
+- `decor(path, "Grocery_shop.xlsx", tab_name='Fruits',
              dataframe=master_df,
              row_h=None, col_ws=[11, 17, 165],
              header_h=27, conditional_coloring={'apple':'34eb5f', 'banana':'e8eb34'},
-             header_color="DDDDDD", body_color="FFFFFF",
-             left_col_color="FFFFFF",
-             footnote="open 24/7")` - full example with passing dataframe, including conditional formatting and specified columns width.
+             exact_condition=True,
+         header_fill_color="DDDDDD", header_text_color='000000', body_color="FFFFFF",
+         left_col_color="FFFFFF",
+         footnote="open 24/7")` - full example with passing dataframe, including conditional formatting and specified columns width.
 >Instructions and additional description:
 Copy file into your working code directory. Import module into your code using `import magic_xl`. Read module class description or call `help(magic_xl.decor)` command for all arguments documentation.
   

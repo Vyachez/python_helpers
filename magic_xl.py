@@ -1,5 +1,5 @@
 '''
-Excel formatting plugin v.1
+Excel formatting module v.1
 
 October 2019
 V.Nesterov
@@ -21,8 +21,8 @@ import string
 
 def decor(path, file_name, tab_name, dataframe=[],
          row_h=None, col_ws=[20],
-         header_h=30, conditional_coloring=None,
-         header_color="DDDDDD", body_color="FFFFFF",
+         header_h=30, conditional_coloring=None, exact_condition=True,
+         header_fill_color="DDDDDD", header_text_color='000000', body_color="FFFFFF",
          left_col_color="FFFFFF",
          footnote=None):
     '''
@@ -39,9 +39,11 @@ def decor(path, file_name, tab_name, dataframe=[],
             - col_ws - columns width as a list of integers for each column in sequence,
                 default=[20] - optional;
             - header_h - top row height, default=30 - optional;
-            - conditional_coloring - dictionary where key is a cell string to find and format and 
+            - conditional_coloring - dictionary where key is incell string to find and format and 
                 value is color in HEX format (as string), default=None - optional;
-            - header_color - color of top row in HEX (string), default="DDDDDD" (grey) - optional;
+            - condition - boolean to exactly match keys in conditional formatting dictionary or contain the key in cell
+            - header_fill_color - color of top row in HEX (string), default="DDDDDD" (grey) - optional;
+            - header_text_color - color of text in top row in HEX (string), default="000000" (black) - optional;
             - body_color - color of background in HEX (string), default="FFFFFF" (white) - optional;
             - left_col_color - color of left column in HEX (string), default="FFFFFF" (white) - optional;
             - footnote - footnote at the end of the document, default=None - optional.
@@ -107,7 +109,7 @@ def decor(path, file_name, tab_name, dataframe=[],
     def add_head_style(wb):
         name = 'headstyle'
         st = NamedStyle(name=name)
-        st.font = Font(name='Calibri', bold=True, color='000000', size=10)
+        st.font = Font(name='Calibri', bold=True, color=header_text_color, size=10)
         bd = Side(style='thin', color="000000")
         st.border = Border(left=bd, top=bd, right=bd, bottom=bd)
         st.alignment=Alignment(horizontal='center',
@@ -116,8 +118,8 @@ def decor(path, file_name, tab_name, dataframe=[],
                             wrap_text=True,
                             shrink_to_fit=False,
                             indent=0)
-        st.fill = PatternFill(start_color=header_color,
-                           end_color=header_color,
+        st.fill = PatternFill(start_color=header_fill_color,
+                           end_color=header_fill_color,
                            fill_type='solid')
         wb.add_named_style(st)
         return name
@@ -185,8 +187,8 @@ def decor(path, file_name, tab_name, dataframe=[],
         main_tab.column_dimensions[letters[dim]].width = w
     
     # ##### conditional formatting
-    # adds conditional format to selected range
-    def add_cond_text_format(ws, text, color, start, end):
+    # adds conditional format to selected range - exact match
+    def add_cond_text_format_exact(ws, text, color, start, end):
         '''
         Takes:
         - ws - worksheet object
@@ -201,10 +203,31 @@ def decor(path, file_name, tab_name, dataframe=[],
         rule.formula = ['"{}"'.format(text)]
         ws.conditional_formatting.add(start+":"+end, rule)
     
+    # adds conditional format to selected range - contains text
+    def add_cond_text_format_contains(ws, text, color, start, end):
+        '''
+        Takes:
+        - ws - worksheet object
+        - text - as string
+        - color - hex color
+        - start cell+col string
+        - end cell+col string
+        '''
+        print("using non-exact cond formatting")
+        fill = PatternFill(bgColor=color)
+        dxf = DifferentialStyle(fill=fill)
+        rule = Rule(type="containsText", operator="containsText", text=text, dxf=dxf)
+        rule.formula = ['NOT(ISERROR(SEARCH("{}",A2)))'.format(text)]
+        ws.conditional_formatting.add(start+":"+end, rule)
+    
     # inserting conditional formatting formula for ratings
     if conditional_coloring != None:
-        for val in conditional_coloring:
-            add_cond_text_format(main_tab, val, conditional_coloring[val], 'A2', letters[-1]+str(rows_no))
+        if exact_condition:
+            for val in conditional_coloring:
+                add_cond_text_format_exact(main_tab, val, conditional_coloring[val], 'A2', letters[-1]+str(rows_no))
+        else:
+            for val in conditional_coloring:
+                add_cond_text_format_contains(main_tab, val, conditional_coloring[val], 'A2', letters[-1]+str(rows_no))
     
     # ##### making filters
     print("Finalizing \n")
@@ -222,6 +245,8 @@ def decor(path, file_name, tab_name, dataframe=[],
     # Saving workbook
     if "." in file_name:
         file_name = file_name.split(".")[0]+"_fmt.xlsx"
+    elif "." not in file_name:
+        file_name = file_name+"_fmt.xlsx"
     wb.save(filename = path+file_name)
     print("Finished formatting, saved.")
     
