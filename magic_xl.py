@@ -52,8 +52,9 @@ def decor(path, file_name, tab_name, dataframe=[],
         Returns:
             None. Saves spreadhseet in same directory
     '''
-    if path[-1] != "/":
-        path = path+"/"
+    if path != "":
+        if path[-1] != "/":
+            path = path+"/"
     
     # if converting file itself
     if len(dataframe) == 0:
