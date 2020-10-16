@@ -99,8 +99,8 @@ def decor(path, file_name, tab_name, frame=[],
             - hide_cols - list - integers of columns(fields) to hide
             - freeze_top - bool - to freeze top row
             - footnote - footnote at the end of the document, default=None - optional.
-        Returns:
-            None. Saves spreadhseet in same directory
+        Returns: None
+            Saves spreadhseet in same directory
     '''
     if path != "":
         if path[-1] != "/":
