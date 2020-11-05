@@ -33,7 +33,7 @@ def decor(path, file_name, tab_name, frame=[],
          group_row = {},
          header_fill_color="DDDDDD", header_text_color='000000',
          body_color="FFFFFF",
-         left_col_color="FFFFFF",
+         format_column_dict={},
          highlight_row_dict={},
          highlight_index_dict={},
          hide_cols = [],
@@ -70,7 +70,36 @@ def decor(path, file_name, tab_name, frame=[],
             - header_fill_color - color of top row in HEX (string), default="DDDDDD" (grey) - optional;
             - header_text_color - color of text in top row in HEX (string), default="000000" (black) - optional;
             - body_color - color of background in HEX (string), default="FFFFFF" (white) - optional;
-            - left_col_color - color of left column in HEX (string), default="FFFFFF" (white) - optional;
+            
+            - format_column_dict- dictionary of dictionaries - to format specific columns that consit of:
+                column (key) - int columns index to format
+                font_name (key) - str - font name (value)
+                font_bold (key) - bool - bold font (value)
+                font_color (key) - hex - font color (value)
+                font_size (key) - int - font size (value)
+                top_border_type (key) - str - top border type  (value)
+                top_border_color (key) - str - top border color (value)
+                bot_border_type (key) - str - bot border type (value)
+                bot_border_color (key) - str - bot border color (value)
+                left_border_type (key) - str - left border type (value)
+                left_border_color (key) - str - left border color (value)
+                right_border_type (key) - str - right border type (value)
+                right_border_color (key) - str - right border color (value)
+                align_horizn (key) - str - horisontal alignment (value)
+                align_vertic (key) - str - verticl alignment (value)
+                text_rotation (key) - int - text rotation (value)
+                wrap_text (key) - bool - wrap_text (value)
+                shrink_to_fit (key) - bool - shrink_to_fit (value)
+                indent (key) - int - indent (value)
+                fill_start_color (key) - hex - cell fill color to start (value)
+                fill_end_color (key) - hex - cell fill color to end (value)
+                fill_type (key) - str - fill_type (value)
+        
+                example: {1: {'font_name': 'Calibri'
+                              'font_bold': False,
+                              'font_color':'000000',
+                              ...}}
+            
             - highlight_row_dict- dictionary - to highlight rows - (row only highlighters) that consit of:
                 id - integer - unique dictionary identifier for each highlighter
                 rows - list of rows (integers)
@@ -78,6 +107,8 @@ def decor(path, file_name, tab_name, frame=[],
                 hlt_txt_color - string - format: "000000";
                 hlt_border_bold - boolean;
                 hlt_font_bold - boolean;
+                hlt_align_horiz - str;
+                hlt_align_vert - str;
                 example: {1: {'rows':[1,3,4], 'hlt_color': "000000",
                                                   'hlt_txt_color':"000000",
                                                   'hlt_border_bold':True,
@@ -90,6 +121,8 @@ def decor(path, file_name, tab_name, frame=[],
                 hlt_txt_color - string - format: "000000";
                 hlt_border_bold - boolean;
                 hlt_font_bold - boolean;
+                hlt_align_horiz - str;
+                hlt_align_vert - str;
                 example: {1: {'idxs':[[1,3],[1,2],[3,4]],
                                                   'hlt_color': "000000",
                                                   'hlt_txt_color':"000000",
@@ -99,8 +132,8 @@ def decor(path, file_name, tab_name, frame=[],
             - hide_cols - list - integers of columns(fields) to hide
             - freeze_top - bool - to freeze top row
             - footnote - footnote at the end of the document, default=None - optional.
-        Returns: None
-            Saves spreadhseet in same directory
+        Returns:
+            None. Saves spreadhseet in same directory
     '''
     if path != "":
         if path[-1] != "/":
@@ -244,22 +277,36 @@ def decor(path, file_name, tab_name, frame=[],
         wb.add_named_style(st)
         return name
        
-    # left column style
-    def add_leftcol_style(wb):
-        name = 'indexer_' + str(tab_name)
+    # column style by demand
+    def add_col_style(wb, column, font_name='Calibri', font_bold=False,
+                            font_color='000000', font_size=11, 
+                            top_border_type='thin', top_border_color='000000',
+                            bot_border_type='thin', bot_border_color='000000',
+                            left_border_type='thin', left_border_color='000000', 
+                            right_border_type='thin', right_border_color='000000', 
+                            align_horizn='left', align_vertic='center',
+                            text_rotation=0, wrap_text=True, shrink_to_fit=False,
+                            indent=0, fill_start_color='FFFFFF',
+                            fill_end_color='FFFFFF', fill_type='solid'):
+        name = 'column_' + str(column) + "_" + str(tab_name)
         st = NamedStyle(name=name)
-        st.font = Font(name='Calibri', bold=False, size=10)
-        bd = Side(style='thin', color="000000")
-        st.border = Border(left=bd, top=bd, right=bd, bottom=bd)
-        st.alignment=Alignment(horizontal='left',
-                            vertical='center',
-                            text_rotation=0,
-                            wrap_text=True,
-                            shrink_to_fit=False,
-                            indent=0)
-        st.fill = PatternFill(start_color=left_col_color,
-                           end_color=left_col_color,
-                           fill_type='solid')
+        st.font = Font(name=font_name, bold=font_bold,
+                       color=font_color, size=font_size)
+        bd_top = Side(style=top_border_type, color=top_border_color)
+        bd_bot = Side(style=bot_border_type, color=bot_border_color)
+        bd_left = Side(style=left_border_type, color=left_border_color)
+        bd_right = Side(style=right_border_type, color=right_border_color)
+        st.border = Border(left=bd_left, top=bd_top,
+                           right=bd_right, bottom=bd_bot)
+        st.alignment=Alignment(horizontal=align_horizn,
+                            vertical=align_vertic,
+                            text_rotation=text_rotation,
+                            wrap_text=wrap_text,
+                            shrink_to_fit=shrink_to_fit,
+                            indent=indent)
+        st.fill = PatternFill(start_color=fill_start_color,
+                           end_color=fill_end_color,
+                           fill_type=fill_type)
         wb.add_named_style(st)
         return name
         
@@ -292,8 +339,8 @@ def decor(path, file_name, tab_name, frame=[],
         bdb = Side(style=bord_side, color="000000")
         bdt = Side(style='thin', color="000000")
         st.border = Border(left=bdt, top=bdb, right=bdt, bottom=bdb)
-        st.alignment=Alignment(horizontal='left',
-                            vertical='center',
+        st.alignment=Alignment(horizontal=highlight_vals['hlt_align_horiz'],
+                            vertical=highlight_vals['hlt_align_vert'],
                             text_rotation=0,
                             wrap_text=True,
                             shrink_to_fit=False,
@@ -316,29 +363,54 @@ def decor(path, file_name, tab_name, frame=[],
     
     # ##### applying styles 
     # appending styles to workbook if new workbook
-    # left column style
-    index_style = add_leftcol_style(wb)
-    for rw in range(2, rows):
-        main_tab['A'+str(rw)].style = index_style
-        # applying data types if any
-        for k in dates_cols:
-            if k == 'A':
-                main_tab['A'+str(rw)].number_format = dates_cols[k]
-                
-    # header style
-    head_style = add_head_style(wb)
-    for l in letters:
-        main_tab[l+"1"].style = head_style
-
     # body style
     body_style = add_body_style(wb)
     for rw in range(2, rows):
-        for l in letters[1:]:
+        for l in letters:
             main_tab[l+str(rw)].style = body_style
             # applying data types if any
             for k in dates_cols:
                 if k == l:
                     main_tab[l+str(rw)].number_format = dates_cols[k]
+                    
+    # column styles
+    if len(format_column_dict) != 0:
+        # applying formatting to columns
+        for col in format_column_dict.keys():
+            col_style = add_col_style(wb, letters[col],
+                                format_column_dict[col]['font_name'],
+                                format_column_dict[col]['font_bold'],
+                                format_column_dict[col]['font_color'],
+                                format_column_dict[col]['font_size'], 
+                                format_column_dict[col]['top_border_type'],
+                                format_column_dict[col]['top_border_color'],
+                                format_column_dict[col]['bot_border_type'], 
+                                format_column_dict[col]['bot_border_color'],
+                                format_column_dict[col]['left_border_type'],
+                                format_column_dict[col]['left_border_color'],
+                                format_column_dict[col]['right_border_type'],
+                                format_column_dict[col]['right_border_color'],
+                                format_column_dict[col]['align_horizn'],
+                                format_column_dict[col]['align_vertic'],
+                                format_column_dict[col]['text_rotation'],
+                                format_column_dict[col]['wrap_text'],
+                                format_column_dict[col]['shrink_to_fit'],
+                                format_column_dict[col]['indent'],
+                                format_column_dict[col]['fill_start_color'],
+                                format_column_dict[col]['fill_end_color'],
+                                format_column_dict[col]['fill_type'])
+            for rw in range(2, rows):
+                main_tab[letters[col]+str(rw)].style = col_style
+                # applying data types if any
+                for k in dates_cols:
+                    if k == letters[col]:
+                        main_tab[letters[col]+str(rw)].number_format = dates_cols[k]
+
+    # header style
+    head_style = add_head_style(wb)
+    for l in letters:
+        main_tab[l+"1"].style = head_style
+                
                     
     # row highlighter style
     if len(highlight_row_dict) != 0:
