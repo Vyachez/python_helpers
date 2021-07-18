@@ -1,6 +1,6 @@
-# Library of Python helper functions
+# Collection of useful Python functions and modules
 
-This library of helper functions that can be used for Python projects related to data parsing, cleansing, preparation or any automation efforts.
+This collection of modules ands functions can help with Python projects related to data parsing, cleansing and preparation. You will find here such things like ***large file openers, email scrapers, Excel formatting automation tools*** and others.
 
 ## Getting Started
 
@@ -18,7 +18,7 @@ Most common:
 Use `pip install <module name>` to acquire necessary modules.
 Additional modules to be indicated for each helper function
 
-## List of helpers
+## List of modules
 **1. _rename_files.py_** - Rename multiple files within directory
 
 **2. _read_outlook.py_** - Extracting data from OutLook emails according to provided query.
@@ -49,8 +49,16 @@ Additional modules to be indicated for each helper function
          left_col_color="FFFFFF",
          footnote="open 24/7")` - full example with passing dataframe, including conditional formatting and specified columns width.
 >Instructions and additional description:
-Copy file into your working code directory. Import module into your code using `import magic_xl`. Read module class description or call `help(magic_xl.decor)` command for all arguments documentation.
-  
+- Copy file into your working code directory. Import module into your code using `import magic_xl`. Read module class description or call `help(magic_xl.decor)` command for all arguments documentation.
+
+**4. _data_processing.py_** - Opening large data files in `.csv` and `.xlsx` format, evaluating and cleansing data.
+>_Additional modules required to install:_
+- chardet
+- collections
+
+ >_Instructions:_
+- Copy file into your working code directory. Import module into your code using `import data_processing`. Read module class description or call `help(data_processing.Util)`,  `help(data_processing.Cure)`, `help(data_processing.Lookup)` commands for all arguments and functions documentation.
+ 
 ### Contributing to this repository
 - anyone can contribute to this repository with pull request
 - new helper function should have short description and arguments documentation
@@ -62,8 +70,5 @@ Anyone can use this repository code for their own purpose and at own risk. There
 In case if advice, consultation required to embed the code into specific project, please send request to developer.
 
 ### Developers
-Please list your name here if you contribute to this repository and indicate function/helper name you are contributing to.
->**Viacheslav Nesterov:**
-> - _read_outlook.py_
-> - _rename_files.py_
-> - _magic_xl.py_
+Please list your name here if you contribute to this repository and indicate module name you are contributing to.
+>**Viacheslav Nesterov** - currently all modules
